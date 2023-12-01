@@ -3,7 +3,7 @@
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/omar-web-dev-2/orders-management.git
+   git clone [https://github.com/omar-web-dev-2/orders-management.git](https://github.com/omar-web-dev-2/root-server.git)
    ```
 
    ```bash
