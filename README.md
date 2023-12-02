@@ -108,6 +108,12 @@ export const notFound = (req: Request, res: Response, next: NextFunction) => {
 
 ```
 
+#### use not found page
+server.ts
+```bash 
+app.use(notFound);
+```
+
 ## Global error handler
 config/middlewares/globalErrorhandler.ts
 
@@ -128,6 +134,15 @@ export const globalErrorHandler = (
 };
 
 ```
+
+#### use Global error handler
+server.ts
+```bash 
+app.use(globalErrorHandler);
+```
+
+
+
 
 
 ## API List
