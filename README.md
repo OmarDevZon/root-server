@@ -118,20 +118,35 @@ app.use(notFound);
 config/middlewares/globalErrorhandler.ts
 
 ```bash 
-import { NextFunction, Request, Response } from 'express';
+import { ErrorRequestHandler } from 'express';
 
-export const globalErrorHandler = (
-  error: any,
-  req: Request,
-  res: Response,
-  next: NextFunction,
+type TErrorSource = {
+  path: string | number;
+  message: string;
+}[];
+
+export const globalErrorHandler: ErrorRequestHandler = (
+  error,
+  req,
+  res,
+  next,
 ) => {
-  return res.status(500).json({
-    success: false,
-    message: error.message || 'Something went wrong!',
-    error,
+  const statusCode = 5000;
+  const success = false;
+  const message = 'Something went wrong!';
+  const errorSource: TErrorSource = [
+    {
+      path: '',
+      message: 'Something went wrong!',
+    },
+  ];
+  return res.status(statusCode).json({
+    success,
+    message: error.message || message,
+    errorSource,
   });
 };
+
 
 ```
 
