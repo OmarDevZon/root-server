@@ -13,7 +13,7 @@
 instal node modules
 
 ```bash
- npm i
+  npm i
 ```
 
 Runs the application
