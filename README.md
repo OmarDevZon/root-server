@@ -141,8 +141,37 @@ server.ts
 app.use(globalErrorHandler);
 ```
 
+## Response 
+utils/sendResponse.ts
+```bash 
+import { Response } from 'express';
 
+type TResponse<T> = {
+  statusCode: number;
+  success: boolean;
+  message?: string;
+  data: T;
+};
 
+export const sendResponse = <T>(res: Response, data: TResponse<T>) => {
+  res.status(data?.statusCode).json({
+    success: data.success,
+    message: data.message,
+    data: data.data,
+  });
+};
+
+```
+
+#### user Response
+```bash
+sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'Academic Department created successfully',
+      data: result,
+    });
+```
 
 
 ## API List
