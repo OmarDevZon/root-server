@@ -202,35 +202,35 @@ app.use('/api/v1', router);
 
 
      server file strachar
-```bash
+```plaintext
 |-src
-|-----app
-|----------config
-|----------------databaseConnecting.ts
-|----------------index.ts
-|----------------other.ts
-|----------middlewares
-|----------------globalErrorhandler.ts
-|----------------notFound.ts
-|----------------validators.ts
-|----------------other.ts
-|----------modules
-|----------------user
-|--------------------user.controller.ts
-|--------------------user.interface.ts
-|--------------------user.model.ts
-|--------------------user.route.ts
-|--------------------user.service.ts
-|--------------------user.validation.ts
-|--------------------other.ts
-|----------------other
-|----------routes
-|----------------index.ts
-|----------utils
-|----------------catchAsync.ts
-|----------------sendResponse.ts
-|----------------other.ts
-|-----server.ts
+|------app
+|-----|-----config
+|-----|----|-------databaseConnecting.ts
+|-----|----|-------index.ts
+|-----|----|-------other.ts
+|-----|-----middlewares
+|-----|----|-------globalErrorhandler.ts
+|-----|----|-------notFound.ts
+|-----|----|-------validators.ts
+|-----|----|-------other.ts
+|-----|-----modules
+|-----|----|-------user
+|-----|----|------|-----user.controller.ts
+|-----|----|------|-----user.interface.ts
+|-----|----|------|-----user.model.ts
+|-----|----|------|-----user.route.ts
+|-----|----|------|-----user.service.ts
+|-----|----|------|-----user.validation.ts
+|-----|----|------|-----other.ts
+|-----|----|-------other
+|-----|-----routes
+|-----|----|-------index.ts
+|-----|-----utils
+|-----|----|-------catchAsync.ts
+|-----|----|-------sendResponse.ts
+|-----|----|-------other.ts
+|------server.ts
 ```
 
 
