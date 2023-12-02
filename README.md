@@ -202,7 +202,7 @@ app.use('/api/v1', router);
 
 
      server file strachar
-```plaintext
+```bash
 |-src
 |------app
 |-----|-----config
