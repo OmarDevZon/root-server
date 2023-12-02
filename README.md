@@ -89,6 +89,27 @@ MONGO_URI_DEV = 'your local database url'
 MONGO_URI_PROD = 'your production database url'
 ```
 
+
+## Not Found page 
+config/middlewares/notFound.ts
+
+```bash
+
+import { NextFunction, Request, Response } from 'express';
+import httpStatus from 'http-status';
+
+export const notFound = (req: Request, res: Response, next: NextFunction) => {
+  return res.status(httpStatus.NOT_FOUND).json({
+    success: false,
+    message: 'API Not Found !!',
+    error: '',
+  });
+};
+
+```
+
+
+
 ## API List
 
     1. create a user [host-link] ``` /api/users ```
