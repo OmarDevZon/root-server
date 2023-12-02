@@ -108,6 +108,26 @@ export const notFound = (req: Request, res: Response, next: NextFunction) => {
 
 ```
 
+## Global error handler
+config/middlewares/globalErrorhandler.ts
+
+```bash 
+import { NextFunction, Request, Response } from 'express';
+
+export const globalErrorHandler = (
+  error: any,
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  return res.status(500).json({
+    success: false,
+    message: error.message || 'Something went wrong!',
+    error,
+  });
+};
+
+```
 
 
 ## API List
