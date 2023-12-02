@@ -142,7 +142,7 @@ app.use(globalErrorHandler);
 ```
 
 ## Response 
-utils/sendResponse.ts
+src/app/utils/sendResponse.ts
 ```bash 
 import { Response } from 'express';
 
@@ -164,6 +164,7 @@ export const sendResponse = <T>(res: Response, data: TResponse<T>) => {
 ```
 
 #### user Response
+src/app/
 ```bash
 sendResponse(res, {
       statusCode: httpStatus.OK,
@@ -171,6 +172,65 @@ sendResponse(res, {
       message: 'Academic Department created successfully',
       data: result,
     });
+```
+
+## Router 
+src/app/routers/intex.ts
+```bash 
+
+import { Router } from 'express';
+const router = Router();
+
+const moduleRoutes = [
+  {
+    path: '/users',
+    route: UserRoutes,
+  }
+];
+
+moduleRoutes.forEach((route) => router.use(route.path, route.route));
+
+export default router;
+
+```
+
+#### use Router
+server.ts
+```bash 
+app.use('/api/v1', router);
+```
+
+
+     server file strachar
+```bash
+|-src
+|-----app
+|----------config
+|----------------databaseConnecting.ts
+|----------------index.ts
+|----------------other.ts
+|----------middlewares
+|----------------globalErrorhandler.ts
+|----------------notFound.ts
+|----------------validators.ts
+|----------------other.ts
+|----------modules
+|----------------user
+|--------------------user.controller.ts
+|--------------------user.interface.ts
+|--------------------user.model.ts
+|--------------------user.route.ts
+|--------------------user.service.ts
+|--------------------user.validation.ts
+|--------------------other.ts
+|----------------other
+|----------routes
+|----------------index.ts
+|----------utils
+|----------------catchAsync.ts
+|----------------sendResponse.ts
+|----------------other.ts
+|-----server.ts
 ```
 
 
@@ -185,3 +245,4 @@ sendResponse(res, {
     7. Retrieve all orders for a specific user [host-link] ``` /api/users/<userId>/orders ```
     8.  Calculate Total Price of Orders for a Specific User
      [host-link] ``` /api/users/<userId>/orders/total-price ```
+
