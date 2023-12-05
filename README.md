@@ -114,8 +114,9 @@ server.ts
 app.use(notFound);
 ```
 
+1st time use 
 ## Global error handler
-config/middlewares/globalErrorhandler.ts
+src/app/middlewares/globalErrorhandler.ts
 
 ```bash 
 import { ErrorRequestHandler } from 'express';
@@ -151,6 +152,154 @@ export const globalErrorHandler: ErrorRequestHandler = (
 ```
 
 #### use Global error handler
+server.ts
+```bash 
+app.use(globalErrorHandler);
+```
+## Global error handler 
+2nd time use 
+
+##### Global error handler interface
+src/app/error/error.iterface.ts
+```bash
+/* eslint-disable @typescript-eslint/no-explicit-any */
+export type TErrorSource = {
+  path: string | number;
+  message: string;
+}[];
+
+export type TGlobalReturnError = {
+  statusCode?: number;
+  message?: any;
+  errorSource?: any;
+  error?: any;
+  stack?: null | any;
+};
+
+export type TValidationErrorResponse = {
+  statusCode: number;
+  message: string;
+  errorSource: TErrorSource;
+  error?: any;
+};
+```
+## Global error handler function
+src/app/error/handel.cast.error.ts
+1. 
+```bash
+export const handelCastError = (
+  error: mongoose.Error.CastError,
+): TValidationErrorResponse => {
+  const errorSource: TErrorSource = [
+    { path: error?.path || '', message: error?.message },
+  ];
+
+  return {
+    statusCode: 400,
+    message: config.SERVER_PROD
+      ? 'Validation Error'
+      : 'Mongoose Cast Validation Error',
+    errorSource,
+  };
+};
+```
+#### 2. handel.mongoose.error.ts
+src/app/error/handel.mongoose.error.ts
+```bash 
+
+export const handelMongooseError = (
+  error: mongoose.Error.ValidationError,
+): TValidationErrorResponse => {
+  const ObgToArray = Object.values(error?.errors);
+  
+
+  const errorSource: TErrorSource = ObgToArray.map(
+    (val: mongoose.Error.ValidatorError | mongoose.Error.CastError) => {
+      return {
+        path: val?.path || '',
+        message: val?.message || 'Something went wrong',
+      };
+    },
+  );
+
+
+  return {
+    statusCode: 400,
+    message: (config.SERVER_PROD as string | undefined)
+      ? 'Validation Error'
+      : ('Mongoose Validation Error' as string),
+    errorSource,
+  };
+};
+```
+
+
+
+
+
+ ### Global error handler all error convert one shape
+src/app/middlewares/globalErrorhandler.ts
+```bash
+export const globalErrorHandler: ErrorRequestHandler = (
+  error,
+  req,
+  res,
+  next,
+): TGlobalReturnError => {
+  const success = false;
+  let statusCode = error.statusCode || 500;
+  let message = 'Something went wrong!';
+  let errorSource: TErrorSource = [
+    {
+      path: '',
+      message: 'Something went wrong!',
+    },
+  ];
+
+  // zod error
+  if (error instanceof ZodError) {
+    const simplifiedError = handelZodError(error);
+    statusCode = simplifiedError?.statusCode;
+    message = simplifiedError?.message;
+    errorSource = simplifiedError?.errorSource;
+  }
+  // Mongoose Error
+  else if (error.name === 'ValidationError') {
+    const simplifiedError = handelMongooseError(error);
+    statusCode = simplifiedError?.statusCode;
+    message = simplifiedError?.message;
+    errorSource = simplifiedError?.errorSource;
+  }
+  // Cast Error
+  else if (error.name === 'CastError') {
+    const simplifiedError = handelCastError(error);
+    statusCode = simplifiedError?.statusCode;
+    message = simplifiedError?.message;
+    errorSource = simplifiedError?.errorSource;
+  }
+
+  // Duplicate Error
+
+  // else if (error.code === 11000) {
+  //   const simplifiedError = handelDuplicateError(error);
+  //   statusCode = simplifiedError?.statusCode;
+  //   message = simplifiedError?.message;
+  //   errorSource = simplifiedError?.errorSource;
+  // }
+
+  // default error
+  return res.status(statusCode).json({
+    success,
+    message,
+    errorSource,
+    error : config.SERVER_PROD ? null : error,
+    stack: config.SERVER_PROD ? null : error.stack,
+  });
+};
+```
+
+#### use Global error handler 
+
 server.ts
 ```bash 
 app.use(globalErrorHandler);
