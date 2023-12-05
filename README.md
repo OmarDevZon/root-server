@@ -184,6 +184,7 @@ export type TValidationErrorResponse = {
 };
 ```
 ## Global error handler function
+##### handel.cast.error.ts
 src/app/error/handel.cast.error.ts
 1. 
 ```bash
@@ -232,7 +233,26 @@ export const handelMongooseError = (
   };
 };
 ```
+#### 3. handel.zod.error.ts
+src/app/error/handel.zod.error.ts
+```bash
 
+export const handelZodError = (error: ZodError): TValidationErrorResponse => {
+  const errorSource: TErrorSource = error.issues.map((issue: ZodIssue) => {
+    return {
+      path: issue?.path[issue?.path?.length - 1] || '',
+      message: issue?.message || 'Something went wrong',
+    };
+  });
+
+  return {
+    statusCode: 400,
+    message: config.SERVER_PROD ? 'Validation Error' : 'Zod Validation Error',
+    errorSource,
+  };
+};
+
+```
 
 
 
